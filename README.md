@@ -1,7 +1,5 @@
-# Curtain 🎭
-
 <p align="center">
-  <img src="./art/curtain-logo.svg" width="200" alt="Curtain Logo">
+  <img src="https://github.com/dayCod/curtain/blob/main/art/curtain-logo.png" alt="Curtain Logo">
 </p>
 
 <p align="center">
