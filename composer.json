@@ -1,7 +1,7 @@
 {
-    "name": "nunomaduro/skeleton-php",
-    "description": "A skeleton repository for my packages",
-    "keywords": ["php", "skeleton", "package"],
+    "name": "daycode/curtain",
+    "description": "Elegantly Enhanced Maintenance Mode for Laravel",
+    "keywords": ["php", "laravel", "package"],
     "license": "MIT",
     "authors": [
         {
