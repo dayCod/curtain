@@ -22,15 +22,19 @@ class CurtainServiceProvider extends ServiceProvider
     public function boot(Kernel $kernel): void
     {
         $this->publishes([
-            __DIR__.'/../config/curtain.php' => config_path('curtain.php'),
             __DIR__.'/../resources/views' => resource_path('views/vendor/curtain'),
-        ], 'curtain');
+        ], 'curtain-views');
+
+        $this->publishes([
+            __DIR__.'/../config/curtain.php' => config_path('curtain.php'),
+        ], 'curtain-config');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Commands\CurtainUpCommand::class,
                 Commands\CurtainDownCommand::class,
                 Commands\CurtainPreviewCommand::class,
+                Commands\CurtainTemplatesCommand::class,
             ]);
         }
 

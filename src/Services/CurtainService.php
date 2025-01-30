@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Daycode\Curtain\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class CurtainService
@@ -119,5 +120,39 @@ class CurtainService
             file_get_contents($this->maintenanceFilePath()),
             true
         );
+    }
+
+    public function getAvailableTemplates(): array
+    {
+        $templates = config('curtain.templates', []);
+
+        if (config('curtain.allow_custom_templates', true)) {
+            $customTemplates = $this->scanCustomTemplates();
+            $templates = array_merge($templates, $customTemplates);
+        }
+
+        return $templates;
+    }
+
+    protected function scanCustomTemplates(): array
+    {
+        $path = config('curtain.custom_templates_path');
+
+        if (!is_dir($path)) {
+            return [];
+        }
+
+        $files = glob($path . '/*.blade.php');
+        $templates = [];
+
+        foreach ($files as $file) {
+            $name = basename($file, '.blade.php');
+            $templates[$name] = [
+                'name' => Str::title(str_replace('-', ' ', $name)),
+                'view' => "vendor.curtain.templates.{$name}",
+            ];
+        }
+
+        return $templates;
     }
 }

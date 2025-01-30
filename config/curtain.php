@@ -16,4 +16,19 @@ return [
     ],
 
     'refresh_interval' => 60, // seconds
+
+    'templates' => [
+        'default' => [
+            'name' => 'Default Template',
+            'view' => 'curtain::templates.default',
+        ],
+        'modern' => [
+            'name' => 'Modern Template',
+            'view' => 'curtain::templates.modern',
+        ],
+    ],
+
+    'allow_custom_templates' => true,
+
+    'custom_templates_path' => resource_path('views/vendor/curtain/templates'),
 ];
