@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Daycode\Curtain;
 
-use Daycode\Curtain\Services\CurtainService;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Daycode\Curtain\Services\CurtainService;
+use Daycode\Curtain\Http\Middleware\CurtainMiddleware;
 
 class CurtainServiceProvider extends ServiceProvider
 {
@@ -16,13 +19,27 @@ class CurtainServiceProvider extends ServiceProvider
         $this->app->singleton('curtain', fn ($app): \Daycode\Curtain\Services\CurtainService => new CurtainService);
     }
 
-    public function boot(): void
+    public function boot(Kernel $kernel): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'curtain');
-
         $this->publishes([
             __DIR__.'/../config/curtain.php' => config_path('curtain.php'),
             __DIR__.'/../resources/views' => resource_path('views/vendor/curtain'),
         ], 'curtain');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Commands\CurtainUpCommand::class,
+                Commands\CurtainDownCommand::class,
+                Commands\CurtainPreviewCommand::class,
+            ]);
+        }
+
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'curtain');
+
+        $kernel->prependMiddleware(CurtainMiddleware::class);
+
+        Route::middleware('web')
+            ->group(__DIR__.'/routes.php');
     }
 }
