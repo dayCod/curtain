@@ -22,6 +22,7 @@ class CurtainDownCommand extends BaseCommand
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return self::FAILURE;
         }
     }

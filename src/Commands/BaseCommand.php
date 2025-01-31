@@ -10,7 +10,7 @@ abstract class BaseCommand extends Command
 {
     protected function validateTimer(?string $timer): bool
     {
-        if (!$timer) {
+        if ($timer === null || $timer === '' || $timer === '0') {
             return true;
         }
 
@@ -26,12 +26,12 @@ abstract class BaseCommand extends Command
         $unit = strtolower($matches[2]);
 
         // Convert ke format DateInterval yang valid
-        return match($unit) {
+        return match ($unit) {
             'second' => "PT{$amount}S",
             'minute' => "PT{$amount}M",
             'hour' => "PT{$amount}H",
             'day' => "P{$amount}D",
-            'week' => "P" . ($amount * 7) . "D",
+            'week' => 'P'.($amount * 7).'D',
             default => throw new \InvalidArgumentException("Invalid time unit: {$unit}")
         };
     }

@@ -18,10 +18,10 @@ class CurtainTemplatesCommand extends BaseCommand
 
         $this->table(
             ['Template', 'Name', 'View'],
-            collect($templates)->map(fn($template, $key) => [
+            collect($templates)->map(fn ($template, $key): array => [
                 $key,
                 $template['name'],
-                $template['view']
+                $template['view'],
             ])
         );
 

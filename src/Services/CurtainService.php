@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Daycode\Curtain\Services;
 
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class CurtainService
@@ -138,11 +138,11 @@ class CurtainService
     {
         $path = config('curtain.custom_templates_path');
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             return [];
         }
 
-        $files = glob($path . '/*.blade.php');
+        $files = glob($path.'/*.blade.php');
         $templates = [];
 
         foreach ($files as $file) {

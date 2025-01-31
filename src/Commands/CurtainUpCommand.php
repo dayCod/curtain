@@ -20,11 +20,10 @@ class CurtainUpCommand extends BaseCommand
 
     public function handle(): int
     {
-        if ($timer = $this->option('timer')) {
-            if (!$this->validateTimer($timer)) {
-                $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');
-                return self::FAILURE;
-            }
+        if (($timer = $this->option('timer')) && ! $this->validateTimer($timer)) {
+            $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');
+
+            return self::FAILURE;
         }
 
         try {
@@ -46,6 +45,7 @@ class CurtainUpCommand extends BaseCommand
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return self::FAILURE;
         }
     }

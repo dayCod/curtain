@@ -6,7 +6,6 @@ namespace Daycode\Curtain\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Daycode\Curtain\Facades\Curtain;
 
 class PreviewController extends Controller
 {
@@ -21,7 +20,7 @@ class PreviewController extends Controller
             'timer' => $timer?->toIso8601String(),
             'message' => $request->message,
             'refresh' => false,
-            'preview' => true
+            'preview' => true,
         ]);
     }
 }

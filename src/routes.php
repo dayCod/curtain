@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Route;
 use Daycode\Curtain\Http\Controllers\PreviewController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('curtain/preview', [PreviewController::class, 'show'])
     ->name('curtain.preview')

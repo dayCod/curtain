@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Daycode\Curtain\Commands;
 
 use Illuminate\Support\Facades\URL;
-use Daycode\Curtain\Facades\Curtain;
 
 class CurtainPreviewCommand extends BaseCommand
 {
@@ -18,11 +17,10 @@ class CurtainPreviewCommand extends BaseCommand
 
     public function handle(): int
     {
-        if ($timer = $this->option('timer')) {
-            if (!$this->validateTimer($timer)) {
-                $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');
-                return self::FAILURE;
-            }
+        if (($timer = $this->option('timer')) && ! $this->validateTimer($timer)) {
+            $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');
+
+            return self::FAILURE;
         }
 
         try {
@@ -33,7 +31,7 @@ class CurtainPreviewCommand extends BaseCommand
                 [
                     'timer' => $timer ? $this->parseTimer($timer) : null,
                     'message' => $this->option('message'),
-                    'template' => $this->option('template')
+                    'template' => $this->option('template'),
                 ]
             );
 
@@ -43,6 +41,7 @@ class CurtainPreviewCommand extends BaseCommand
 
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return self::FAILURE;
         }
     }

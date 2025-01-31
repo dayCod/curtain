@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Daycode\Curtain;
 
+use Daycode\Curtain\Http\Middleware\CurtainMiddleware;
+use Daycode\Curtain\Services\CurtainService;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Daycode\Curtain\Services\CurtainService;
-use Daycode\Curtain\Http\Middleware\CurtainMiddleware;
 
 class CurtainServiceProvider extends ServiceProvider
 {

@@ -13,7 +13,7 @@ class CurtainMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Curtain::isDownForMaintenance() && !$this->shouldPassThrough($request)) {
+        if (Curtain::isDownForMaintenance() && ! $this->shouldPassThrough($request)) {
             return Curtain::render();
         }
 
