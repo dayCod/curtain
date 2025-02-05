@@ -7,9 +7,31 @@
 
     {{-- Base Styles --}}
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'curtain': {
+                            50: '#FFF5F3',
+                            100: '#FFF1ED',
+                            200: '#F7CAC1',
+                            300: '#F5B3A7',
+                            400: '#F39C8D',
+                            500: '#F17B6B',
+                            600: '#D86E5F',
+                            700: '#BF6154',
+                            800: '#A65448',
+                            900: '#8C473C'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     @stack('styles')
 </head>
-<body class="@yield('body-class', 'bg-gray-50 min-h-screen flex items-center justify-center')">
+<body class="@yield('body-class', 'bg-curtain-50 min-h-screen flex items-center justify-center')">
     <div class="@yield('container-class', 'max-w-3xl w-full mx-4')">
         {{-- Header Section --}}
         @section('header')
@@ -18,10 +40,10 @@
 
         {{-- Main Content --}}
         @section('content')
-            <div class="@yield('content-class', 'bg-white rounded-lg shadow-lg p-8')">
+            <div class="@yield('content-class', 'bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-8')">
                 {{-- Title & Message --}}
                 @section('message')
-                    <h1 class="@yield('title-class', 'text-3xl font-bold text-gray-900 mb-4')">
+                    <h1 class="@yield('title-class', 'text-3xl font-bold text-curtain-500 mb-4')">
                         @yield('maintenance-title', 'Under Maintenance')
                     </h1>
 

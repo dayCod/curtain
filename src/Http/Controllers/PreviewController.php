@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Daycode\Curtain\Http\Controllers;
 
+use Daycode\Curtain\Facades\Curtain;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 
 class PreviewController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request): View
     {
         abort_unless($request->hasValidSignature(), 403);
 
@@ -22,5 +25,31 @@ class PreviewController extends Controller
             'refresh' => false,
             'preview' => true,
         ]);
+    }
+
+    public function disable(): JsonResponse
+    {
+        try {
+            if (! Curtain::isDownForMaintenance()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Application is not in maintenance mode',
+                ], 400);
+            }
+
+            Curtain::disable();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Maintenance mode disabled successfully',
+            ], 200);
+
+        } catch (\Exception) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to disable maintenance mode',
+            ], 500);
+        }
     }
 }

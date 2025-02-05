@@ -7,6 +7,7 @@ namespace Daycode\Curtain;
 use Daycode\Curtain\Http\Middleware\CurtainMiddleware;
 use Daycode\Curtain\Services\CurtainService;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,9 +42,24 @@ class CurtainServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/routes.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'curtain');
 
-        $kernel->prependMiddleware(CurtainMiddleware::class);
+        $this->replaceDefaultMaintenanceMiddleware($kernel);
 
         Route::middleware('web')
             ->group(__DIR__.'/routes.php');
+    }
+
+    protected function replaceDefaultMaintenanceMiddleware($kernel)
+    {
+        $reflection = new \ReflectionClass($kernel);
+        $middlewareProperty = $reflection->getProperty('middleware');
+        $middlewareProperty->setAccessible(true);
+
+        $currentMiddleware = $middlewareProperty->getValue($kernel);
+
+        $filteredMiddleware = array_filter($currentMiddleware, fn ($middleware): bool => $middleware !== PreventRequestsDuringMaintenance::class);
+
+        $middlewareProperty->setValue($kernel, array_values($filteredMiddleware));
+
+        $kernel->prependMiddleware(CurtainMiddleware::class);
     }
 }

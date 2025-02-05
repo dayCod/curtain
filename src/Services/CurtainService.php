@@ -45,10 +45,9 @@ class CurtainService
             return false;
         }
 
-        $data = json_decode(file_get_contents($this->maintenanceFilePath()), true);
+        $data = $this->getMaintenanceData();
 
-        return isset($data['secret']) &&
-               $request->path() === $data['secret'];
+        return isset($data['secret']) && $request->path() === $data['secret'];
     }
 
     public function render(): Response
@@ -90,7 +89,6 @@ class CurtainService
             'refresh' => $options['refresh'] ?? false,
             'template' => $options['template'] ?? null,
             'secret' => $options['secret'] ?? null,
-            'allowed_ips' => $options['allowed_ips'] ?? [],
         ];
     }
 
@@ -154,5 +152,56 @@ class CurtainService
         }
 
         return $templates;
+    }
+
+    public function shouldPassThroughPath(string $path): bool
+    {
+        $excludedPaths = config('curtain.excluded_paths', []);
+
+        if (in_array($path, $excludedPaths)) {
+            return true;
+        }
+
+        foreach ($excludedPaths as $excludedPath) {
+            $excludedPath = rtrim((string) $excludedPath, '/');
+            $path = rtrim($path, '/');
+
+            if (str_contains($excludedPath, '*')) {
+                $pattern = str_replace('*', '.*', $excludedPath);
+                if (preg_match('#^'.$pattern.'$#i', $path)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function isAllowedIp(?string $ip): bool
+    {
+        $allowedIps = config('curtain.allowed_ips', []);
+
+        if (empty($allowedIps)) {
+            return false;
+        }
+
+        return in_array($ip, $allowedIps);
+    }
+
+    public function canAccessPath(Request $request): bool
+    {
+        if (! $this->isDownForMaintenance()) {
+            return true;
+        }
+
+        if ($this->shouldPassThroughPath($request->path())) {
+            return true;
+        }
+
+        if ( $this->isAllowedIp($request->ip())) {
+            return true;
+        }
+
+        return $this->hasValidBypassToken($request);
     }
 }

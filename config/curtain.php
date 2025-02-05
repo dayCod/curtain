@@ -6,9 +6,18 @@ return [
     'default_template' => 'default',
 
     'excluded_paths' => [
+
+        // Don't remove these line
         '_debugbar/*',
         'horizon/*',
         'nova/*',
+        'curtain/*',
+        'curtain/disable',
+        // End
+
+        // Here's your excluded paths
+
+        //
     ],
 
     'allowed_ips' => [

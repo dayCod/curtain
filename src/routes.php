@@ -7,4 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('curtain/preview', [PreviewController::class, 'show'])
     ->name('curtain.preview')
-    ->middleware(['web', 'signed']);
+    ->middleware(['signed']);
+
+Route::get('curtain/disable', [PreviewController::class, 'disable'])
+    ->name('curtain.disable')
+    ->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class);

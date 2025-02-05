@@ -1,89 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name') }} - Maintenance Mode</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+@extends('curtain::templates.base')
+
+@push('styles')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-</head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center font-[Inter]">
-    <div class="max-w-3xl w-full mx-4">
-        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-            <div class="flex flex-col items-center justify-center space-y-6">
-                <!-- Maintenance Icon -->
-                <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center">
-                    <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                </div>
+@endpush
 
-                <!-- Title -->
-                <div class="text-center">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Under Maintenance</h1>
-                    @if($message)
-                        <p class="text-gray-600 md:text-lg">{{ $message }}</p>
-                    @else
-                        <p class="text-gray-600 md:text-lg">We're working hard to improve our system for you.</p>
-                    @endif
-                </div>
+@section('body-class', 'bg-[#FFF5F3] min-h-screen flex items-center justify-center font-[Inter] relative overflow-hidden')
 
-                <!-- Timer Section -->
-                @if($timer)
-                    <div class="w-full max-w-sm bg-gray-50 rounded-xl p-6 text-center">
-                        <p class="text-gray-500 mb-3">Estimated time remaining</p>
-                        <div id="countdown" class="text-3xl font-semibold text-blue-600 font-mono">
-                            Calculating...
-                        </div>
-                    </div>
+@section('container-class', 'max-w-3xl w-full mx-4 relative z-10')
 
-                    <script>
-                        const endTime = new Date('{{ $timer }}').getTime();
+@section('header')
+    <div class="w-24 h-24 bg-gradient-to-br from-[#F17B6B] to-[#F7CAC1] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg relative">
+        {{-- Decorative background --}}
+        <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
 
-                        const formatNumber = (number) => number.toString().padStart(2, '0');
-
-                        const countdown = setInterval(() => {
-                            const now = new Date().getTime();
-                            const distance = endTime - now;
-
-                            if (distance < 0) {
-                                clearInterval(countdown);
-                                document.getElementById('countdown').innerHTML = 'Refreshing...';
-                                location.reload();
-                                return;
-                            }
-
-                            const hours = Math.floor(distance / (1000 * 60 * 60));
-                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                            document.getElementById('countdown').innerHTML =
-                                `${formatNumber(hours)}:${formatNumber(minutes)}:${formatNumber(seconds)}`;
-                        }, 1000);
-                    </script>
-                @endif
-
-                <!-- Status Indicator -->
-                <div class="flex items-center space-x-2 text-sm text-gray-500">
-                    <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <span>System maintenance in progress</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="text-center mt-8 text-gray-500 text-sm">
-            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
-        </div>
+        {{-- Icon --}}
+        <svg class="w-12 h-12 text-white relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
     </div>
 
-    @if($refresh)
-        <script>
-            setTimeout(() => {
-                location.reload();
-            }, {{ config('curtain.refresh_interval', 60) * 1000 }});
-        </script>
-    @endif
-</body>
-</html>
+    {{-- Decorative background elements --}}
+    <div class="absolute top-0 left-0 w-96 h-96 bg-[#F17B6B]/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#F7CAC1]/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+@endsection
+
+@section('content-class', 'bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl p-8 md:p-12 border border-white/50')
+
+@section('title-class', 'text-3xl md:text-4xl font-bold text-[#F17B6B] mb-3 text-center')
+
+@section('message-class', 'text-gray-600 md:text-lg text-center')
+
+@section('maintenance-title', 'Under Maintenance')
+
+@section('countdown-class', 'w-full max-w-sm bg-white/50 backdrop-blur-sm rounded-2xl p-6 text-center mx-auto mt-8 border border-white/50')
+
+@section('additional-content')
+    <div class="flex items-center justify-center space-x-3 text-sm text-gray-600 mt-8">
+        <div class="relative">
+            <div class="w-2.5 h-2.5 bg-[#F17B6B] rounded-full animate-pulse"></div>
+            <div class="absolute top-0 left-0 w-2.5 h-2.5 bg-[#F17B6B]/50 rounded-full animate-ping"></div>
+        </div>
+        <span>System maintenance in progress</span>
+    </div>
+@endsection
+
+@section('footer-content')
+    <div class="text-gray-500 text-sm relative z-10">
+        &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+    </div>
+@endsection

@@ -1,60 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name') }} - Maintenance Mode</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="max-w-2xl w-full mx-4">
-        <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">We'll be back soon!</h1>
+@extends('curtain::templates.base')
 
-            @if($message)
-                <p class="text-gray-600 mb-6">{{ $message }}</p>
-            @endif
+@section('body-class', 'bg-gradient-to-br from-[#FFF5F3] to-white min-h-screen flex items-center justify-center')
 
-            @if($timer)
-                <div class="mb-6">
-                    <p class="text-sm text-gray-500 mb-2">Estimated time remaining:</p>
-                    <div id="countdown" class="text-2xl font-mono text-blue-600">
-                        Calculating...
-                    </div>
-                </div>
+@section('container-class', 'max-w-2xl w-full mx-4')
 
-                <script>
-                    const endTime = new Date('{{ $timer }}').getTime();
+@section('content-class', 'bg-white rounded-2xl shadow-lg p-8 text-center border border-[#F7CAC1]/20')
 
-                    const countdown = setInterval(() => {
-                        const now = new Date().getTime();
-                        const distance = endTime - now;
+@section('title-class', 'text-3xl font-bold text-[#F17B6B] mb-4 tracking-tight')
 
-                        if (distance < 0) {
-                            clearInterval(countdown);
-                            document.getElementById('countdown').innerHTML = 'Refreshing...';
-                            location.reload();
-                            return;
-                        }
+@section('message-class', 'text-gray-600 mb-6')
 
-                        const hours = Math.floor(distance / (1000 * 60 * 60));
-                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+@section('maintenance-title', 'We\'ll be right back!')
 
-                        document.getElementById('countdown').innerHTML =
-                            `${hours}h ${minutes}m ${seconds}s`;
-                    }, 1000);
-                </script>
-            @endif
+@section('additional-content')
+    <div class="mt-8 flex flex-col items-center">
+        <div class="relative">
+            {{-- Background circles for visual interest --}}
+            <div class="absolute -inset-4 bg-[#F7CAC1]/10 rounded-full blur-lg"></div>
+            <div class="relative flex items-center gap-3">
+                <div class="w-2 h-2 bg-[#F17B6B] rounded-full animate-pulse"></div>
+                <span class="text-sm text-gray-600">System maintenance in progress</span>
+            </div>
+        </div>
 
-            @if($refresh)
-                <script>
-                    setTimeout(() => {
-                        location.reload();
-                    }, {{ config('curtain.refresh_interval', 60) * 1000 }});
-                </script>
-            @endif
+        {{-- Decorative elements --}}
+        <div class="mt-12 flex gap-2 opacity-30">
+            @foreach(range(1, 3) as $i)
+                <div class="w-1 h-1 rounded-full bg-[#F17B6B]"></div>
+            @endforeach
         </div>
     </div>
-</body>
-</html>
+@endsection
