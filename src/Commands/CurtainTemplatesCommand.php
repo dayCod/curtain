@@ -8,11 +8,24 @@ use Daycode\Curtain\Facades\Curtain;
 
 class CurtainTemplatesCommand extends BaseCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'curtain:templates';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'List all available maintenance mode templates';
 
-    public function handle(): int
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         $templates = Curtain::getAvailableTemplates();
 

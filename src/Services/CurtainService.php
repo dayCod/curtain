@@ -13,10 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CurtainService
 {
+    /**
+     * @var string Cache key for storing maintenance timer
+     */
     protected const CACHE_KEY = 'curtain:timer';
 
+    /**
+     * @var string Path to maintenance mode file
+     */
     protected const MAINTENANCE_PATH = 'framework/down';
 
+    /**
+     * Enable maintenance mode with the given options.
+     *
+     * @param array $options Configuration options for maintenance mode
+     */
     public function enable(array $options = []): void
     {
         $payload = $this->buildMaintenancePayload($options);
@@ -28,17 +39,31 @@ class CurtainService
         }
     }
 
+    /**
+     * Disable maintenance mode and clear associated data.
+     */
     public function disable(): void
     {
         $this->removeMaintenanceFile();
         $this->clearTimer();
     }
 
+    /**
+     * Check if the application is in maintenance mode.
+     *
+     * @return bool True if in maintenance mode, false otherwise
+     */
     public function isDownForMaintenance(): bool
     {
         return file_exists($this->maintenanceFilePath());
     }
 
+    /**
+     * Check if the request has a valid bypass token.
+     *
+     * @param Request $request The HTTP request
+     * @return bool True if bypass token is valid
+     */
     public function hasValidBypassToken(Request $request): bool
     {
         if (! $this->isDownForMaintenance()) {
@@ -50,6 +75,11 @@ class CurtainService
         return isset($data['secret']) && $request->path() === $data['secret'];
     }
 
+    /**
+     * Render the maintenance mode view.
+     *
+     * @return Response The HTTP response containing the maintenance view
+     */
     public function render(): Response
     {
         $data = $this->getMaintenanceData();
@@ -64,22 +94,41 @@ class CurtainService
         ], Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
+    /**
+     * Set the maintenance mode timer.
+     *
+     * @param string $duration Duration string (e.g., "PT2H" for 2 hours)
+     */
     protected function setTimer(string $duration): void
     {
         $endTime = Carbon::now()->add($duration);
         Cache::put(self::CACHE_KEY, $endTime);
     }
 
+    /**
+     * Get the current maintenance timer if set.
+     *
+     * @return Carbon|null The end time or null if no timer is set
+     */
     protected function getTimer(): ?Carbon
     {
         return Cache::get(self::CACHE_KEY);
     }
 
+    /**
+     * Clear the maintenance timer.
+     */
     protected function clearTimer(): void
     {
         Cache::forget(self::CACHE_KEY);
     }
 
+    /**
+     * Build the maintenance mode payload from options.
+     *
+     * @param array $options Configuration options
+     * @return array The maintenance payload
+     */
     protected function buildMaintenancePayload(array $options): array
     {
         return [
@@ -92,11 +141,21 @@ class CurtainService
         ];
     }
 
+    /**
+     * Get the full path to the maintenance file.
+     *
+     * @return string The maintenance file path
+     */
     protected function maintenanceFilePath(): string
     {
         return storage_path(self::MAINTENANCE_PATH);
     }
 
+    /**
+     * Write the maintenance payload to file.
+     *
+     * @param array $payload The maintenance configuration
+     */
     protected function writeMaintenanceFile(array $payload): void
     {
         File::put(
@@ -105,6 +164,9 @@ class CurtainService
         );
     }
 
+    /**
+     * Remove the maintenance file if it exists.
+     */
     protected function removeMaintenanceFile(): void
     {
         if (File::exists($this->maintenanceFilePath())) {
@@ -112,6 +174,11 @@ class CurtainService
         }
     }
 
+    /**
+     * Get the current maintenance configuration.
+     *
+     * @return array The maintenance configuration
+     */
     protected function getMaintenanceData(): array
     {
         return json_decode(
@@ -120,6 +187,11 @@ class CurtainService
         );
     }
 
+    /**
+     * Get all available maintenance templates.
+     *
+     * @return array List of available templates
+     */
     public function getAvailableTemplates(): array
     {
         $templates = config('curtain.templates', []);
@@ -132,6 +204,11 @@ class CurtainService
         return $templates;
     }
 
+    /**
+     * Scan for custom maintenance templates.
+     *
+     * @return array List of custom templates found
+     */
     protected function scanCustomTemplates(): array
     {
         $path = config('curtain.custom_templates_path');
@@ -154,6 +231,12 @@ class CurtainService
         return $templates;
     }
 
+    /**
+     * Check if a path should be allowed through maintenance mode.
+     *
+     * @param string $path The path to check
+     * @return bool True if path should be accessible
+     */
     public function shouldPassThroughPath(string $path): bool
     {
         $excludedPaths = config('curtain.excluded_paths', []);
@@ -177,6 +260,12 @@ class CurtainService
         return false;
     }
 
+    /**
+     * Check if an IP address is allowed during maintenance mode.
+     *
+     * @param string|null $ip The IP address to check
+     * @return bool True if IP is whitelisted
+     */
     public function isAllowedIp(?string $ip): bool
     {
         $allowedIps = config('curtain.allowed_ips', []);
@@ -188,6 +277,12 @@ class CurtainService
         return in_array($ip, $allowedIps);
     }
 
+    /**
+     * Check if a request should be allowed through maintenance mode.
+     *
+     * @param Request $request The HTTP request
+     * @return bool True if request should be allowed
+     */
     public function canAccessPath(Request $request): bool
     {
         if (! $this->isDownForMaintenance()) {

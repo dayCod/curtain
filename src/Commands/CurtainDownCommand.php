@@ -8,11 +8,24 @@ use Daycode\Curtain\Facades\Curtain;
 
 class CurtainDownCommand extends BaseCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'curtain:down';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Bring the application out of maintenance mode';
 
-    public function handle(): int
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         try {
             Curtain::disable();

@@ -8,6 +8,11 @@ use Daycode\Curtain\Facades\Curtain;
 
 class CurtainUpCommand extends BaseCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'curtain:up
                           {--timer= : Duration for maintenance mode (e.g., "2 hours", "30 minutes")}
                           {--message= : Custom message to display}
@@ -15,9 +20,17 @@ class CurtainUpCommand extends BaseCommand
                           {--secret= : Secret token for bypass}
                           {--refresh : Auto refresh the maintenance page}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Put the application into maintenance mode with Curtain';
 
-    public function handle(): int
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         if ($timer = $this->option('timer')) {
             if (!$this->validateTimer($timer)) {
@@ -54,6 +67,11 @@ class CurtainUpCommand extends BaseCommand
         }
     }
 
+    /**
+     * Generates a secret token for bypassing maintenance mode.
+     *
+     * @return string
+     */
     protected function generateSecret(): string
     {
         return md5(uniqid('', true));

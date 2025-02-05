@@ -11,10 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CurtainMiddleware
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function handle(Request $request, Closure $next): Response
     {
         $canAccess = Curtain::canAccessPath($request);
-        // dd($canAccess);
 
         if ($canAccess) {
             return $next($request);

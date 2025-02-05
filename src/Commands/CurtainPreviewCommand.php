@@ -8,14 +8,27 @@ use Illuminate\Support\Facades\URL;
 
 class CurtainPreviewCommand extends BaseCommand
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'curtain:preview
                           {--timer= : Preview with timer (e.g., "2 hours", "30 minutes")}
                           {--message= : Preview with custom message}
                           {--template= : Template to preview}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Preview maintenance mode page';
 
-    public function handle(): int
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         if (($timer = $this->option('timer')) && ! $this->validateTimer($timer)) {
             $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');

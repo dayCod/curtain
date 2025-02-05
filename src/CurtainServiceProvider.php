@@ -13,6 +13,9 @@ use Illuminate\Support\ServiceProvider;
 
 class CurtainServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/curtain.php', 'curtain');
@@ -20,6 +23,9 @@ class CurtainServiceProvider extends ServiceProvider
         $this->app->singleton('curtain', fn ($app): \Daycode\Curtain\Services\CurtainService => new CurtainService);
     }
 
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(Kernel $kernel): void
     {
         $this->publishes([
@@ -48,6 +54,13 @@ class CurtainServiceProvider extends ServiceProvider
             ->group(__DIR__.'/routes.php');
     }
 
+    /**
+     * Replace the default PreventRequestsDuringMaintenance middleware with our own.
+     * This allows us to support both maintenance mode and the preview feature.
+     *
+     * @param  mixed  $kernel
+     * @return void
+     */
     protected function replaceDefaultMaintenanceMiddleware($kernel)
     {
         $reflection = new \ReflectionClass($kernel);
