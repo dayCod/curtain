@@ -1,7 +1,8 @@
-<div class="countdown-container @yield('countdown-class', 'mt-8 text-center')">
-    <p class="text-sm text-gray-500 mb-2">Estimated time remaining:</p>
-    <div id="countdown" class="text-2xl font-mono text-[#F17B6B]">
-        Calculating...
+<div class="countdown-container @yield('countdown-class', 'mt-12 text-center')">
+    <div class="inline-block text-6xl font-mono text-white space-x-4 py-8">
+        <div id="countdown" class="font-bold font-mono">
+            Calculating...
+        </div>
     </div>
 </div>
 
@@ -26,10 +27,10 @@
 
                 if (distance < 0) {
                     clearInterval(this.interval);
-                    this.element.innerHTML = 'Maintenance Complete';
+                    this.element.innerHTML = '<span class="text-curtain-500">Maintenance Complete</span>';
 
                     try {
-                        const baseUrl = window.location.origin; // Get base URL
+                        const baseUrl = window.location.origin;
                         const response = await fetch(`${baseUrl}/curtain/disable`, {
                             method: 'GET',
                             headers: {
@@ -39,22 +40,18 @@
                         });
 
                         if (response.ok) {
-                            const data = await response.json();
-                            console.log('Data:', data);
                             window.location.reload();
                         } else {
-                            console.error('Failed to disable maintenance mode:', response.statusText);
                             setTimeout(() => window.location.reload(), 5000);
                         }
                     } catch (error) {
-                        console.error('Failed to disable maintenance mode:', error);
                         setTimeout(() => window.location.reload(), 5000);
                     }
                     return;
                 }
 
                 const parts = this.formatTime(distance);
-                this.element.innerHTML = parts.join(':');
+                this.element.innerHTML = parts.join('<span class="text-curtain-500 mx-2">:</span>');
             }
 
             formatTime(distance) {

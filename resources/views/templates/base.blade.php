@@ -31,8 +31,12 @@
     </script>
     @stack('styles')
 </head>
-<body class="@yield('body-class', 'bg-curtain-50 min-h-screen flex items-center justify-center')">
-    <div class="@yield('container-class', 'max-w-3xl w-full mx-4')">
+<body class="@yield('body-class', 'bg-black min-h-screen flex items-center justify-center overflow-hidden')">
+    <div class="fixed inset-0">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black_75%)]"></div>
+    </div>
+
+    <div class="@yield('container-class', 'max-w-3xl w-full mx-4 relative z-10')">
         {{-- Header Section --}}
         @section('header')
             @include('curtain::components.status')
@@ -40,16 +44,18 @@
 
         {{-- Main Content --}}
         @section('content')
-            <div class="@yield('content-class', 'bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-8')">
+            <div class="@yield('content-class', 'text-center')">
                 {{-- Title & Message --}}
                 @section('message')
-                    <h1 class="@yield('title-class', 'text-3xl font-bold text-curtain-500 mb-4')">
-                        @yield('maintenance-title', 'Under Maintenance')
+                    <h1 class="@yield('title-class', 'text-7xl font-bold text-white mb-4 tracking-tight')">
+                        @if ($message)
+                        <h1 class="text-7xl font-bold text-white mb-6 tracking-tight">
+                            {{ $message }}
+                        </h1>
+                        @else
+                            @yield('maintenance-title', 'Under Maintenance')
+                        @endif
                     </h1>
-
-                    @if($message)
-                        <p class="@yield('message-class', 'text-gray-600')">{{ $message }}</p>
-                    @endif
                 @show
 
                 {{-- Countdown Timer --}}
@@ -64,8 +70,8 @@
 
         {{-- Footer Section --}}
         @section('footer')
-            <div class="text-center mt-8 text-gray-500 text-sm">
-                @yield('footer-content', '&copy; ' . date('Y') . ' ' . config('app.name'))
+            <div class="text-center mt-8 text-white/30 text-sm">
+                @yield('footer-content', '© ' . date('Y') . ' ' . config('app.name'))
             </div>
         @show
     </div>

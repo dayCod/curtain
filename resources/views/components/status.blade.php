@@ -1,19 +1,16 @@
 <div @class([
-    'flex items-center justify-center space-x-2 my-4',
+    'flex items-center justify-center space-x-3 mb-8',
     $class ?? ''
 ])>
     <div class="relative">
-        {{-- Pulsing dot --}}
-        <div class="w-2.5 h-2.5 bg-blue-500 rounded-full"></div>
-        <div class="absolute top-0 left-0 w-2.5 h-2.5 bg-blue-500 rounded-full animate-ping opacity-75"></div>
+        <div class="w-3 h-3 bg-curtain-500 rounded-full"></div>
+        <div class="absolute top-0 left-0 w-3 h-3 bg-curtain-500/50 rounded-full animate-ping"></div>
     </div>
-
-    {{-- Status text --}}
-    <span class="text-sm text-gray-600">
+    <span class="text-white/60 uppercase tracking-wider text-sm font-medium">
         @if(isset($status))
             {{ $status }}
         @else
-            System maintenance in progress
+            Please wait until the site is ready to use 🚀
         @endif
     </span>
 </div>

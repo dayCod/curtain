@@ -188,6 +188,23 @@ php artisan curtain:down
 php artisan curtain:preview [options]
 ```
 
+## Template Preview
+
+<details>
+<summary>🎨 View Previews</summary>
+
+### Modern Template
+<p align="center">
+  <img src="art/modern-preview.png" alt="Modern Template" width="600px">
+</p>
+
+### Default Template
+<p align="center">
+  <img src="art/default-preview.png" alt="Default Template" width="600px">
+</p>
+
+</details>
+
 ## Testing
 ```bash
 composer test
