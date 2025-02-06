@@ -30,13 +30,12 @@ class CurtainUpCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        if ($timer = $this->option('timer')) {
-            if (!$this->validateTimer($timer)) {
-                $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');
-                return self::FAILURE;
-            }
+        if (($timer = $this->option('timer')) && ! $this->validateTimer($timer)) {
+            $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');
+
+            return self::FAILURE;
         }
 
         try {
@@ -52,8 +51,8 @@ class CurtainUpCommand extends BaseCommand
 
             // Show info about whitelisted IPs
             $allowedIps = config('curtain.allowed_ips', []);
-            if (!empty($allowedIps)) {
-                $this->components->info('Whitelisted IPs: ' . implode(', ', $allowedIps));
+            if (! empty($allowedIps)) {
+                $this->components->info('Whitelisted IPs: '.implode(', ', $allowedIps));
             }
 
             if ($timer) {
@@ -63,14 +62,13 @@ class CurtainUpCommand extends BaseCommand
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return self::FAILURE;
         }
     }
 
     /**
      * Generates a secret token for bypassing maintenance mode.
-     *
-     * @return string
      */
     protected function generateSecret(): string
     {

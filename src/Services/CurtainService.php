@@ -26,7 +26,7 @@ class CurtainService
     /**
      * Enable maintenance mode with the given options.
      *
-     * @param array $options Configuration options for maintenance mode
+     * @param  array  $options  Configuration options for maintenance mode
      */
     public function enable(array $options = []): void
     {
@@ -61,7 +61,7 @@ class CurtainService
     /**
      * Check if the request has a valid bypass token.
      *
-     * @param Request $request The HTTP request
+     * @param  Request  $request  The HTTP request
      * @return bool True if bypass token is valid
      */
     public function hasValidBypassToken(Request $request): bool
@@ -97,7 +97,7 @@ class CurtainService
     /**
      * Set the maintenance mode timer.
      *
-     * @param string $duration Duration string (e.g., "PT2H" for 2 hours)
+     * @param  string  $duration  Duration string (e.g., "PT2H" for 2 hours)
      */
     protected function setTimer(string $duration): void
     {
@@ -126,7 +126,7 @@ class CurtainService
     /**
      * Build the maintenance mode payload from options.
      *
-     * @param array $options Configuration options
+     * @param  array  $options  Configuration options
      * @return array The maintenance payload
      */
     protected function buildMaintenancePayload(array $options): array
@@ -154,7 +154,7 @@ class CurtainService
     /**
      * Write the maintenance payload to file.
      *
-     * @param array $payload The maintenance configuration
+     * @param  array  $payload  The maintenance configuration
      */
     protected function writeMaintenanceFile(array $payload): void
     {
@@ -234,7 +234,7 @@ class CurtainService
     /**
      * Check if a path should be allowed through maintenance mode.
      *
-     * @param string $path The path to check
+     * @param  string  $path  The path to check
      * @return bool True if path should be accessible
      */
     public function shouldPassThroughPath(string $path): bool
@@ -263,7 +263,7 @@ class CurtainService
     /**
      * Check if an IP address is allowed during maintenance mode.
      *
-     * @param string|null $ip The IP address to check
+     * @param  string|null  $ip  The IP address to check
      * @return bool True if IP is whitelisted
      */
     public function isAllowedIp(?string $ip): bool
@@ -280,7 +280,7 @@ class CurtainService
     /**
      * Check if a request should be allowed through maintenance mode.
      *
-     * @param Request $request The HTTP request
+     * @param  Request  $request  The HTTP request
      * @return bool True if request should be allowed
      */
     public function canAccessPath(Request $request): bool
@@ -293,7 +293,7 @@ class CurtainService
             return true;
         }
 
-        if ( $this->isAllowedIp($request->ip())) {
+        if ($this->isAllowedIp($request->ip())) {
             return true;
         }
 

@@ -14,9 +14,6 @@ class PreviewController extends Controller
 {
     /**
      * Display the maintenance page.
-     *
-     * @param  Request  $request
-     * @return View
      */
     public function show(Request $request): View
     {
@@ -36,7 +33,6 @@ class PreviewController extends Controller
     /**
      * Disable maintenance mode.
      *
-     * @return JsonResponse
      * @throws \Exception
      */
     public function disable(): JsonResponse

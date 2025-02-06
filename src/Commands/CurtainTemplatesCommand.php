@@ -25,7 +25,7 @@ class CurtainTemplatesCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $templates = Curtain::getAvailableTemplates();
 

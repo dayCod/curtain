@@ -28,7 +28,7 @@ class CurtainPreviewCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         if (($timer = $this->option('timer')) && ! $this->validateTimer($timer)) {
             $this->error('Invalid timer format. Use format like "2 hours" or "30 minutes".');

@@ -58,10 +58,9 @@ class CurtainServiceProvider extends ServiceProvider
      * Replace the default PreventRequestsDuringMaintenance middleware with our own.
      * This allows us to support both maintenance mode and the preview feature.
      *
-     * @param  mixed  $kernel
      * @return void
      */
-    protected function replaceDefaultMaintenanceMiddleware($kernel)
+    protected function replaceDefaultMaintenanceMiddleware(mixed $kernel)
     {
         $reflection = new \ReflectionClass($kernel);
         $middlewareProperty = $reflection->getProperty('middleware');

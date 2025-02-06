@@ -3,181 +3,198 @@
 </p>
 
 <p align="center">
-  <a href="https://packagist.org/packages/daycode/sketch"><img src="https://img.shields.io/packagist/v/daycode/sketch" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/daycode/sketch"><img src="https://img.shields.io/packagist/dt/daycode/sketch" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/daycode/sketch"><img src="https://img.shields.io/packagist/l/daycode/sketch" alt="License"></a>
+  <a href="https://packagist.org/packages/daycode/curtain"><img src="https://img.shields.io/packagist/v/daycode/curtain" alt="Latest Stable Version"></a>
+  <a href="https://packagist.org/packages/daycode/curtain"><img src="https://img.shields.io/packagist/dt/daycode/curtain" alt="Total Downloads"></a>
+  <a href="https://packagist.org/packages/daycode/curtain"><img src="https://img.shields.io/packagist/l/daycode/curtain" alt="License"></a>
 </p>
 
-## Blueprint-Based Structure Generator
+## Enhanced Laravel Maintenance Mode Handler
 
-Sketch is a powerful Laravel package that transforms your application development workflow. Instead of starting with migrations or models, Sketch allows you to define your entire application structure using simple YAML blueprints. This schema-first approach ensures consistency and accelerates development across your Laravel applications.
+Curtain is a powerful Laravel package that enhances your application's maintenance mode functionality. Instead of the basic maintenance page, Curtain provides beautiful templates, countdown timers, IP whitelisting, and more flexible control over your maintenance mode.
 
 ## Features
 
-- 📝 **Blueprint-Based Generation**
-  - Define your entire application structure in YAML
-  - Generate models, migrations, and services from a single source
-  - Maintain consistency across your application components
+- 🎨 **Beautiful Templates**
+  - Multiple pre-built templates
+  - Customizable designs
+  - Support for custom templates
+  - Modern, responsive layouts
 
-- ⚡ **Rapid Development**
-  - Eliminate repetitive boilerplate code
-  - Generate complete application components in seconds
-  - Focus on business logic instead of scaffolding
+- ⏲️ **Countdown Timer**
+  - Auto-disable maintenance mode
+  - Real-time countdown display
+  - Automatic page refresh
+  - Configurable durations
 
-- 🧩 **Built-in Relationships**
-  - Support for all Laravel relationships
-  - Automatic foreign key generation
-  - Proper relationship method generation
+- 🔒 **Advanced Access Control**
+  - IP address whitelisting
+  - Path exclusions with wildcard support
+  - Bypass token generation
+  - Flexible middleware system
 
-- 🏗️ **Service Repository Pattern**
-  - Generate service and repository layers
-  - Follow SOLID principles automatically
-  - Maintain clean architecture effortlessly
+- 🛠️ **Developer Friendly**
+  - Simple command-line interface
+  - Preview maintenance pages
+  - Easy configuration
+  - Extensible architecture
 
 ## Quick Installation
 
 1. Install the package via Composer:
 ```bash
-composer require daycode/sketch
-```
+composer require daycode/curtain
 
 2. Publish the configuration:
 ```bash
-php artisan vendor:publish --provider="Daycode\Sketch\SketchServiceProvider"
+php artisan vendor:publish --provider="Daycode\Curtain\CurtainServiceProvider"
 ```
 
-## Quick Usage
-
-1. Create a YAML blueprint:
+3. Preview maintenance page:
 ```bash
-php artisan sketch:make-blueprint models/blog/post
+php artisan curtain:preview --template=modern --timer="30 minutes"
 ```
 
-2. Define your schema in the generated YAML file:
-```yaml
-model: Post
-primaryKey:
-    name: id
-    type: integer
-fields:
-    - { name: title, type: string, nullable: false }
-    - { name: content, type: text, nullable: true }
-    - { name: status, type: enum, nullable: true, options: ['draft', 'published'] }
-timestamps: true
-softDeletes: true
-relationships:
-    - { type: belongsTo, model: User, foreignKey: user_id }
-```
-
-3. Execute Specific Files
+4. Disable maintenance mode:
 ```bash
-php artisan sketch:generate --file=schemas/models/blog/post.yaml
+php artisan curtain:down
 ```
 
 ## Configuration
 
-After publishing the configuration file, you can modify these settings in `config/sketch.php`:
+After publishing the configuration file, you can modify these settings in `config/curtain.php`:
 ```php
 <?php
 
 declare(strict_types=1);
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Default Maintenance Template
+    |--------------------------------------------------------------------------
+    |
+    | This is the default template that will be used for the maintenance page.
+    | The value should match one of the template keys in the templates array.
+    |
+    */
+    'default_template' => 'default',
 
     /*
     |--------------------------------------------------------------------------
-    | Schema Path Configuration
+    | Excluded Paths
     |--------------------------------------------------------------------------
     |
-    | This value determines where your YAML schema files will be stored.
-    | By default, schemas will be placed in the 'schemas' directory
-    | in the root of your project.
+    | These paths will be accessible even when the application is in maintenance
+    | mode. You can use wildcards (*) to match multiple paths.
+    | Warning: Removing core paths may break maintenance mode functionality.
     |
     */
-    'schemas' => [
-        'path' => base_path('schemas'),
+    'excluded_paths' => [
+        '_debugbar/*',
+        'horizon/*',
+        'nova/*',
+        'curtain/*',
+
+        // Exclude your paths here..
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Output Path Configuration
+    | IP Whitelist
     |--------------------------------------------------------------------------
     |
-    | This value determines where your generated files will be placed.
-    | By default, models will be placed in app/Models,
-    | migrations in database/migrations, and actions in app/Actions.
+    | These IP addresses will be able to access the application even when it is
+    | in maintenance mode. Uncomment and add IPs that should have access.
     |
     */
-    'paths' => [
-        'models' => app_path('Models'),
-        'migrations' => database_path('migrations'),
-        'requests' => app_path('Http/Requests'),
+    'allowed_ips' => [
+        // '127.0.0.1',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Stub Path Configuration
+    | Auto-Refresh Interval
     |--------------------------------------------------------------------------
     |
-    | This value determines where your stub files are located.
-    | You can publish these stubs and modify them according to your needs.
+    | Time in seconds before the maintenance page automatically refreshes.
+    | This is useful for checking if maintenance mode has been disabled.
     |
     */
-    'stubs' => [
-        'model' => __DIR__.'/../stubs/model.stub',
-        'migration' => __DIR__.'/../stubs/migration.stub',
-        'request' => __DIR__.'/../stubs/form-request.stub',
+    'refresh_interval' => 60, // seconds
+
+    /*
+    |--------------------------------------------------------------------------
+    | Available Templates
+    |--------------------------------------------------------------------------
+    |
+    | List of available maintenance page templates. Each template should have a
+    | name and a view path. Add your custom templates here if needed.
+    |
+    */
+    'templates' => [
+        'default' => [
+            'name' => 'Default Template',
+            'view' => 'curtain::templates.default',
+        ],
+        'modern' => [
+            'name' => 'Modern Template',
+            'view' => 'curtain::templates.modern',
+        ],
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Default Model Namespace
+    | Custom Templates
     |--------------------------------------------------------------------------
     |
-    | This value determines the default namespace for your models.
+    | Allow users to create and use custom maintenance templates. When enabled,
+    | templates can be placed in the custom templates directory.
     |
     */
-    'model_namespace' => 'App\\Models',
+    'allow_custom_templates' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Templates Path
+    |--------------------------------------------------------------------------
+    |
+    | The path where custom maintenance templates can be stored. These templates
+    | will be automatically detected and made available for use.
+    |
+    */
+    'custom_templates_path' => resource_path('views/vendor/curtain/templates'),
 ];
 
 ```
 
 ## Available Commands
+Maintenance Mode Control:
 
-Generate Blueprints:
 ```bash
-# Simple blueprint
-php artisan sketch:make-blueprint post
+# Enable with options
+php artisan curtain:up [options]
 
-# Nested directory blueprint
-php artisan sketch:make-blueprint models/blog/post
+# Available options:
+--timer="2 hours"      # Set duration
+--message="text"       # Custom message
+--template="modern"    # Select template
+--refresh             # Enable auto-refresh
+--secret="token"      # Custom bypass token
 
-# With soft delete
-php artisan sketch:make-blueprint models/blog/post --soft-delete
+# Disable maintenance mode
+php artisan curtain:down
+
+# Preview maintenance page
+php artisan curtain:preview [options]
 ```
-
-### Component Generation
-```bash
-# Generate from blueprint
-php artisan sketch:generate --file=path/to/schema.yaml [options]
-```
-
-Generation options:
-- `--force`: Override existing files
-- `--service-repository`: Generate both service and repository layers
-- `--service-only`: Generate service layer only
-- `--repository-only`: Generate repository layer only
 
 ## Testing
-
 ```bash
 composer test
 ```
 
 ## Contributing
-
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing to Sketch.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing to Curtain.
 
 ## Security
 

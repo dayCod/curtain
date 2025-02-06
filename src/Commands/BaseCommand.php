@@ -13,9 +13,6 @@ abstract class BaseCommand extends Command
      *
      * The valid format is an integer followed by the time unit (second, minute, hour, day, week).
      * If the timer is not filled in then it is considered valid.
-     *
-     * @param  string|null  $timer
-     * @return bool
      */
     protected function validateTimer(?string $timer): bool
     {
@@ -31,7 +28,8 @@ abstract class BaseCommand extends Command
      * Parse timer string to DateInterval format.
      *
      * @param  string  $timer  Timer string in format "X second|minute|hour|day|week"
-     * @return string  Timer in DateInterval format, e.g. "PT1H"
+     * @return string Timer in DateInterval format, e.g. "PT1H"
+     *
      * @throws \InvalidArgumentException
      */
     protected function parseTimer(string $timer): string
