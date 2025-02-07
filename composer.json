@@ -1,7 +1,7 @@
 {
     "name": "daycode/curtain",
     "description": "Curtain is a powerful Laravel package that enhances your application's maintenance mode functionality.",
-    "keywords": ["php", "laravel", "package"],
+    "keywords": ["php", "laravel", "packages"],
     "license": "MIT",
     "authors": [
         {
