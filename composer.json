@@ -1,7 +1,7 @@
 {
     "name": "daycode/curtain",
-    "description": "A skeleton repository for my packages",
-    "keywords": ["php", "skeleton", "package"],
+    "description": "Curtain is a powerful Laravel package that enhances your application's maintenance mode functionality.",
+    "keywords": ["php", "laravel", "package"],
     "license": "MIT",
     "authors": [
         {
