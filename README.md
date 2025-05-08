@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/dayCod/curtain/blob/master/art/curtain-logo.png" alt="Curtain Logo">
+  <img src="https://github.com/dayCod/curtain/blob/master/art/curtain-logo.png?raw=true" alt="Curtain Logo">
 </p>
 
 <p align="center">
@@ -195,12 +195,12 @@ php artisan curtain:preview [options]
 
 ### Modern Template
 <p align="center">
-  <img src="https://github.com/dayCod/curtain/blob/master/art/modern-page-example.png" alt="Modern Template" width="600px">
+  <img src="https://github.com/dayCod/curtain/blob/master/art/modern-page-example.png?raw=true" alt="Modern Template" width="600px">
 </p>
 
 ### Default Template
 <p align="center">
-  <img src="https://github.com/dayCod/curtain/blob/master/art/default-page-example.png" alt="Default Template" width="600px">
+  <img src="https://github.com/dayCod/curtain/blob/master/art/default-page-example.png?raw=true" alt="Default Template" width="600px">
 </p>
 
 </details>
